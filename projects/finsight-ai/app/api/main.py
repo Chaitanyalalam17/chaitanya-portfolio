@@ -1,3 +1,5 @@
+from pydantic import BaseModel
+from src.genai.rag_assistant import ask_finsight
 
 from pathlib import Path
 
@@ -182,3 +184,30 @@ def get_transaction_explanation(transaction_id: int):
             for feature, value in sorted_contributions[:5]
         ],
     }
+
+class ChatRequest(BaseModel):
+    question: str
+
+
+@app.post("/chat")
+def chat_with_finsight(request: ChatRequest):
+    question = request.question.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty",
+        )
+
+    try:
+        result = ask_finsight(question)
+        return result
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "FinSight AI assistant is unavailable. "
+                "Check Ollama and the knowledge base."
+            ),
+        ) from error

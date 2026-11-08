@@ -65,3 +65,52 @@ def test_missing_explanation():
     response = client.get("/explanations/999999")
 
     assert response.status_code == 404
+
+from unittest.mock import patch
+
+
+def test_chat_success():
+    mock_result = {
+        "question": "Which model does FinSight AI use?",
+        "answer": "FinSight AI uses Isolation Forest.",
+        "sources": ["finsight_overview.md"],
+    }
+
+    with patch(
+        "app.api.main.ask_finsight",
+        return_value=mock_result,
+    ):
+        response = client.post(
+            "/chat",
+            json={
+                "question": "Which model does FinSight AI use?"
+            },
+        )
+
+    assert response.status_code == 200
+    assert response.json()["answer"] == (
+        "FinSight AI uses Isolation Forest."
+    )
+    assert "finsight_overview.md" in response.json()["sources"]
+
+
+def test_chat_empty_question():
+    response = client.post(
+        "/chat",
+        json={"question": "   "},
+    )
+
+    assert response.status_code == 400
+
+
+def test_chat_unavailable():
+    with patch(
+        "app.api.main.ask_finsight",
+        side_effect=RuntimeError("Ollama unavailable"),
+    ):
+        response = client.post(
+            "/chat",
+            json={"question": "Explain anomaly detection"},
+        )
+
+    assert response.status_code == 503
