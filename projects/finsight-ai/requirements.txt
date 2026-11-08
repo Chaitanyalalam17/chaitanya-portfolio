@@ -7,3 +7,4 @@ scikit-learn
 pytest
 python-dotenv
 dbt-duckdb
+joblib
