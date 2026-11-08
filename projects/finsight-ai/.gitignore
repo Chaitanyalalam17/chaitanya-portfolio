@@ -34,3 +34,6 @@ dbt_project/dbt_packages/
 *.duckdb.wal
 # Local dbt user settings
 dbt_project/.user.yml
+
+# ChromaDB local vector database
+data/vector_db/
