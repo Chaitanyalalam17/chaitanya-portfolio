@@ -1,0 +1,50 @@
+
+version: 2
+
+models:
+  - name: daily_financial_kpis
+    description: "Daily financial transaction metrics."
+    columns:
+      - name: transaction_day
+        data_tests:
+          - not_null
+          - unique
+
+      - name: total_transactions
+        data_tests:
+          - not_null
+
+      - name: total_transaction_value
+        data_tests:
+          - not_null
+
+  - name: channel_analytics
+    description: "Transaction metrics by channel."
+    columns:
+      - name: channel
+        data_tests:
+          - not_null
+          - unique
+          - accepted_values:
+              arguments:
+                values:
+                  - Online
+                  - Mobile
+                  - ATM
+                  - Branch
+
+      - name: total_transactions
+        data_tests:
+          - not_null
+
+  - name: customer_analytics
+    description: "Transaction metrics by customer."
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: total_transaction_value
+        data_tests:
+          - not_null

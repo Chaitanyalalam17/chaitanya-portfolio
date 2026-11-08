@@ -24,3 +24,13 @@ models/*.joblib
 
 # VS Code
 .vscode/
+# dbt generated files
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+
+# DuckDB database files
+*.duckdb
+*.duckdb.wal
+# Local dbt user settings
+dbt_project/.user.yml

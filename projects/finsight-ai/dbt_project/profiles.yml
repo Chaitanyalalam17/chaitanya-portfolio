@@ -1,0 +1,8 @@
+finsight_ai:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '../data/processed/finsight.duckdb'
+      schema: analytics
+      threads: 4
